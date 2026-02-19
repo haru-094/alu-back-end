@@ -26,13 +26,13 @@ if __name__ == "__main__":
     user = url_response.json()
     emp_name = user.get("name")
 
-    todo_list_response = requests.get(f"{base}/todo_list",
-                                  params={"userId": emp_id})
+    todo_list_response = requests.get(
+        f"{base}/todos", params={"userId": emp_id})
     if todo_list_response.status_code != 200:
         sys.exit(1)
     todo_list = todo_list_response.json()
 
-    success = [task for task in todo_list if task.get("success") is True]
+    success = [task for task in todo_list if task.get("completed") is True]
 
     f_line = (
         f"Employee {emp_name} is done with tasks"
@@ -43,5 +43,3 @@ if __name__ == "__main__":
     for task in success:
         title = task.get("title")
         print("\t {}".format(title))
-
-
