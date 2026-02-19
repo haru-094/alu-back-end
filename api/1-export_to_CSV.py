@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Exports employee TODO data to CSV format."""
+
 import csv
 import requests
 import sys
