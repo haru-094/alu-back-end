@@ -22,11 +22,14 @@ if __name__ == "__main__":
     ) as res:
         todos = json.load(res)
 
-    completed = [t for t in todos if t.get("completed")]
+    completed = [t for t in todos if t.get("completed") is True]
 
-    print("Employee {} is done with tasks({}/{}):".format(
-        user.get("name"), len(completed), len(todos)
-    ))
+    f_line = (
+        "Employee {} is done with tasks({}/{}):".format(
+            user.get("name"), len(completed), len(todos))
+    )
+    print(f_line)
 
     for t in completed:
-        print("\t {}".format(t.get("title")))
+        title = t.get("title")
+        print("\t {}".format(title))
