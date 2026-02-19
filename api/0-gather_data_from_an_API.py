@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""Returns TODO list progress for a given employee ID."""
+"""
+Gather the data from the request then after that
+return the emp name and number of task.
+"""
 
 import requests
 import sys

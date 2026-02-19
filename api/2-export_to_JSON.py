@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""Exports employee TODO data to JSON format."""
+"""
+get all the data from file that gather the data then
+export in format of json.
+"""
 
 import json
 import requests

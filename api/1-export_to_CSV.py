@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""Exports employee TODO data to CSV format."""
+"""
+get all the data from file that gather the data then
+export in format of csv.
+"""
 
 import csv
 import requests
