@@ -4,8 +4,8 @@ get all the data from file that gather the data then
 export in format of json.
 """
 import json
-import requests
 import sys
+import urllib.request
 
 
 if __name__ == "__main__":
@@ -14,7 +14,8 @@ if __name__ == "__main__":
     user_url = (
         "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
     )
-    user = requests.get(user_url).json()
+    with urllib.request.urlopen(user_url) as response:
+        user = json.loads(response.read().decode())
     username = user.get("username")
 
     todos_url = (
@@ -22,7 +23,8 @@ if __name__ == "__main__":
             emp_id
         )
     )
-    todos = requests.get(todos_url).json()
+    with urllib.request.urlopen(todos_url) as response:
+        todos = json.loads(response.read().decode())
 
     tasks = []
     for task in todos:

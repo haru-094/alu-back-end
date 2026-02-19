@@ -4,8 +4,9 @@ get all the data from file that gather the data then
 export in format of csv.
 """
 import csv
-import requests
+import json
 import sys
+import urllib.request
 
 
 if __name__ == "__main__":
@@ -14,7 +15,8 @@ if __name__ == "__main__":
     user_url = (
         "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
     )
-    user = requests.get(user_url).json()
+    with urllib.request.urlopen(user_url) as response:
+        user = json.loads(response.read().decode())
     username = user.get("username")
 
     todos_url = (
@@ -22,7 +24,8 @@ if __name__ == "__main__":
             emp_id
         )
     )
-    todos = requests.get(todos_url).json()
+    with urllib.request.urlopen(todos_url) as response:
+        todos = json.loads(response.read().decode())
 
     with open("{}.csv".format(emp_id), "w", newline="") as csvfile:
         writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)

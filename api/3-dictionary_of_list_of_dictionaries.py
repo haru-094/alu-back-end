@@ -4,16 +4,19 @@ get all the data from file that gather the data then
 export in format of dict
 """
 import json
-import requests
+import urllib.request
 
 
 if __name__ == "__main__":
-    users = requests.get(
+    with urllib.request.urlopen(
         "https://jsonplaceholder.typicode.com/users"
-    ).json()
-    todos = requests.get(
+    ) as response:
+        users = json.loads(response.read().decode())
+
+    with urllib.request.urlopen(
         "https://jsonplaceholder.typicode.com/todos"
-    ).json()
+    ) as response:
+        todos = json.loads(response.read().decode())
 
     user_map = {}
     for user in users:
