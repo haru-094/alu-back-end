@@ -1,35 +1,47 @@
 #!/usr/bin/python3
 """
 Gather the data from the request then after that
-return the emp name and number of task.
+return the emp name and number of task that complete.
 """
-import json
+import requests
 import sys
-import urllib.request
 
 
 if __name__ == "__main__":
-    emp_id = sys.argv[1]
-    api = "https://jsonplaceholder.typicode.com"
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} emp_id", file=sys.stderr)
+        sys.exit(1)
 
-    with urllib.request.urlopen(
-        "{}/users/{}".format(api, emp_id)
-    ) as res:
-        user = json.load(res)
+    try:
+        emp_id = int(sys.argv[1])
+    except ValueError:
+        print("the id must be vaild (int type)", file=sys.stderr)
+        sys.exit(1)
 
-    with urllib.request.urlopen(
-        "{}/todos?userId={}".format(api, emp_id)
-    ) as res:
-        todos = json.load(res)
+    base = "https://jsonplaceholder.typicode.com"
 
-    completed = [t for t in todos if t.get("completed") is True]
+    url_response = requests.get(f"{base}/users/{emp_id}")
+    if url_response.status_code != 200:
+        sys.exit(1)
+    user = url_response.json()
+    emp_name = user.get("name")
+
+    todo_list_response = requests.get(f"{base}/todo_list",
+                                  params={"userId": emp_id})
+    if todo_list_response.status_code != 200:
+        sys.exit(1)
+    todo_list = todo_list_response.json()
+
+    success = [task for task in todo_list if task.get("success") is True]
 
     f_line = (
-        "Employee {} is done with tasks({}/{}):".format(
-            user.get("name"), len(completed), len(todos))
+        f"Employee {emp_name} is done with tasks"
+        f"({len(success)}/{len(todo_list)}):"
     )
     print(f_line)
 
-    for t in completed:
-        title = t.get("title")
+    for task in success:
+        title = task.get("title")
         print("\t {}".format(title))
+
+
