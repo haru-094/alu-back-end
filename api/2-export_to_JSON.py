@@ -8,28 +8,29 @@ import requests
 import sys
 
 
-emp_id = int(sys.argv[1])
+if __name__ == "__main__":
+    emp_id = int(sys.argv[1])
 
-user_url = (
-    "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
-)
-user = requests.get(user_url).json()
-username = user.get("username")
-
-todos_url = (
-    "https://jsonplaceholder.typicode.com/todos?userId={}".format(
-        emp_id
+    user_url = (
+        "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
     )
-)
-todos = requests.get(todos_url).json()
+    user = requests.get(user_url).json()
+    username = user.get("username")
 
-tasks = []
-for task in todos:
-    tasks.append({
-        "task": task.get("title"),
-        "completed": task.get("completed"),
-        "username": username
-    })
+    todos_url = (
+        "https://jsonplaceholder.typicode.com/todos?userId={}".format(
+            emp_id
+        )
+    )
+    todos = requests.get(todos_url).json()
 
-with open("{}.json".format(emp_id), "w") as jsonfile:
-    json.dump({str(emp_id): tasks}, jsonfile)
+    tasks = []
+    for task in todos:
+        tasks.append({
+            "task": task.get("title"),
+            "completed": task.get("completed"),
+            "username": username
+        })
+
+    with open("{}.json".format(emp_id), "w") as jsonfile:
+        json.dump({str(emp_id): tasks}, jsonfile)
