@@ -3,10 +3,10 @@
 get all the data from file that gather the data then
 export in format of csv.
 """
-
 import csv
 import requests
 import sys
+
 
 emp_id = int(sys.argv[1])
 

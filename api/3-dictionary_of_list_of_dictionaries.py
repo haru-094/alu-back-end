@@ -3,9 +3,9 @@
 get all the data from file that gather the data then
 export in format of dict
 """
-
 import json
 import requests
+
 
 users = requests.get(
     "https://jsonplaceholder.typicode.com/users"
