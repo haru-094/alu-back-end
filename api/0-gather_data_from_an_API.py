@@ -9,31 +9,24 @@ import urllib.request
 
 
 if __name__ == "__main__":
-    emp_id = int(sys.argv[1])
+    emp_id = sys.argv[1]
+    api = "https://jsonplaceholder.typicode.com"
 
-    user_url = (
-        "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
-    )
-    with urllib.request.urlopen(user_url) as response:
-        user = json.loads(response.read().decode())
-    emp_name = user.get("name")
+    with urllib.request.urlopen(
+        "{}/users/{}".format(api, emp_id)
+    ) as res:
+        user = json.load(res)
 
-    todos_url = (
-        "https://jsonplaceholder.typicode.com/todos?userId={}".format(
-            emp_id
-        )
-    )
-    with urllib.request.urlopen(todos_url) as response:
-        todos = json.loads(response.read().decode())
+    with urllib.request.urlopen(
+        "{}/todos?userId={}".format(api, emp_id)
+    ) as res:
+        todos = json.load(res)
 
-    done_task = [t for t in todos if t.get("completed")]
-    total_task = len(todos)
+    completed = [t for t in todos if t.get("completed")]
 
-    print(
-        "Employee {} is done with tasks({}/{}):".format(
-            emp_name, len(done_task), total_task
-        )
-    )
+    print("Employee {} is done with tasks({}/{}):".format(
+        user.get("name"), len(completed), len(todos)
+    ))
 
-    for task in done_task:
-        print("\t {}".format(task.get("title")))
+    for t in completed:
+        print("\t {}".format(t.get("title")))

@@ -9,30 +9,26 @@ import urllib.request
 
 
 if __name__ == "__main__":
-    emp_id = int(sys.argv[1])
+    emp_id = sys.argv[1]
+    api = "https://jsonplaceholder.typicode.com"
 
-    user_url = (
-        "https://jsonplaceholder.typicode.com/users/{}".format(emp_id)
-    )
-    with urllib.request.urlopen(user_url) as response:
-        user = json.loads(response.read().decode())
-    username = user.get("username")
+    with urllib.request.urlopen(
+        "{}/users/{}".format(api, emp_id)
+    ) as res:
+        username = json.load(res).get("username")
 
-    todos_url = (
-        "https://jsonplaceholder.typicode.com/todos?userId={}".format(
-            emp_id
-        )
-    )
-    with urllib.request.urlopen(todos_url) as response:
-        todos = json.loads(response.read().decode())
+    with urllib.request.urlopen(
+        "{}/todos?userId={}".format(api, emp_id)
+    ) as res:
+        todos = json.load(res)
 
     tasks = []
-    for task in todos:
+    for t in todos:
         tasks.append({
-            "task": task.get("title"),
-            "completed": task.get("completed"),
+            "task": t.get("title"),
+            "completed": t.get("completed"),
             "username": username
         })
 
-    with open("{}.json".format(emp_id), "w") as jsonfile:
-        json.dump({str(emp_id): tasks}, jsonfile)
+    with open("{}.json".format(emp_id), "w") as f:
+        json.dump({emp_id: tasks}, f)

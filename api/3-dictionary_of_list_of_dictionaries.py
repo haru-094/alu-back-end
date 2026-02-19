@@ -8,31 +8,28 @@ import urllib.request
 
 
 if __name__ == "__main__":
-    with urllib.request.urlopen(
-        "https://jsonplaceholder.typicode.com/users"
-    ) as response:
-        users = json.loads(response.read().decode())
+    api = "https://jsonplaceholder.typicode.com"
 
-    with urllib.request.urlopen(
-        "https://jsonplaceholder.typicode.com/todos"
-    ) as response:
-        todos = json.loads(response.read().decode())
+    with urllib.request.urlopen("{}/users".format(api)) as res:
+        users = json.load(res)
 
-    user_map = {}
-    for user in users:
-        user_map[user.get("id")] = user.get("username")
+    with urllib.request.urlopen("{}/todos".format(api)) as res:
+        todos = json.load(res)
+
+    usernames = {}
+    for u in users:
+        usernames[u.get("id")] = u.get("username")
 
     result = {}
-    for task in todos:
-        uid = task.get("userId")
-        str_uid = str(uid)
-        if str_uid not in result:
-            result[str_uid] = []
-        result[str_uid].append({
-            "username": user_map.get(uid),
-            "task": task.get("title"),
-            "completed": task.get("completed")
+    for t in todos:
+        uid = str(t.get("userId"))
+        if uid not in result:
+            result[uid] = []
+        result[uid].append({
+            "username": usernames.get(t.get("userId")),
+            "task": t.get("title"),
+            "completed": t.get("completed")
         })
 
-    with open("todo_all_employees.json", "w") as jsonfile:
-        json.dump(result, jsonfile)
+    with open("todo_all_employees.json", "w") as f:
+        json.dump(result, f)
